@@ -42,7 +42,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-// get all rooms
+// get all 
+app.MapGet("/rooms", () =>
+{
+    return rooms;
+});
 
 // get room by id with roomates
 
