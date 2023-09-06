@@ -66,6 +66,23 @@ app.MapGet("/rooms/{roomId}", (int roomId) =>
 });
 
 // update room 
+    app.MapPut("/rooms/{roomId}", (int roomId, Room room) => {
+        Room roomToChange = rooms.FirstOrDefault((r) => r.Id == roomId);
+    //make sure that roomToChange is not null.
+         if (roomToChange == null)
+    {
+        return Results.NotFound();
+    }
+    // check if roomId is equal to the roomId passed in.
+    if(roomId != room.Id){
+        return Results.BadRequest();
+    }
+    // update the properties of the roomToChange with the body of the room we are passing in
+        roomToChange.Name = room.Name;
+        roomToChange.MaxOccupancy = room.MaxOccupancy; 
+        return Results.NoContent();
+    });
+
 
 // delete a room
 
