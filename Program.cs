@@ -85,6 +85,25 @@ app.MapGet("/rooms/{roomId}", (int roomId) =>
 
 
 // delete a room
+app.MapDelete("/rooms/{roomId}", (int roomId) => 
+{
+    Room foundRoom = rooms.FirstOrDefault(r => r.Id == roomId);
+    if (foundRoom == null) 
+    {
+        return Results.NotFound();
+    }
+
+    IEnumerable<Roommate> roommies = roommates.Where(r => r.RoomId == roomId);
+
+    foreach (Roommate roommate in roommies)
+    {
+        roommate.RoomId = null;
+    }
+
+    rooms.Remove(foundRoom);
+    
+    return Results.NoContent();
+});
 
 // get roommates
 
