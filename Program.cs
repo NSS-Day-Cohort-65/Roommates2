@@ -107,6 +107,11 @@ app.MapDelete("/rooms/{roomId}", (int roomId) =>
 
 // get roommates
 
+app.MapGet("/roommates", () =>
+{
+    return roommates;
+});
+
 // get roommate with chores
 
 // add a roommate 
