@@ -66,29 +66,31 @@ app.MapGet("/rooms/{roomId}", (int roomId) =>
 });
 
 // update room 
-    app.MapPut("/rooms/{roomId}", (int roomId, Room room) => {
-        Room roomToChange = rooms.FirstOrDefault((r) => r.Id == roomId);
+app.MapPut("/rooms/{roomId}", (int roomId, Room room) =>
+{
+    Room roomToChange = rooms.FirstOrDefault((r) => r.Id == roomId);
     //make sure that roomToChange is not null.
-         if (roomToChange == null)
+    if (roomToChange == null)
     {
         return Results.NotFound();
     }
     // check if roomId is equal to the roomId passed in.
-    if(roomId != room.Id){
+    if (roomId != room.Id)
+    {
         return Results.BadRequest();
     }
     // update the properties of the roomToChange with the body of the room we are passing in
-        roomToChange.Name = room.Name;
-        roomToChange.MaxOccupancy = room.MaxOccupancy; 
-        return Results.NoContent();
-    });
+    roomToChange.Name = room.Name;
+    roomToChange.MaxOccupancy = room.MaxOccupancy;
+    return Results.NoContent();
+});
 
 
 // delete a room
-app.MapDelete("/rooms/{roomId}", (int roomId) => 
+app.MapDelete("/rooms/{roomId}", (int roomId) =>
 {
     Room foundRoom = rooms.FirstOrDefault(r => r.Id == roomId);
-    if (foundRoom == null) 
+    if (foundRoom == null)
     {
         return Results.NotFound();
     }
@@ -101,7 +103,7 @@ app.MapDelete("/rooms/{roomId}", (int roomId) =>
     }
 
     rooms.Remove(foundRoom);
-    
+
     return Results.NoContent();
 });
 
@@ -113,6 +115,23 @@ app.MapGet("/roommates", () =>
 });
 
 // get roommate with chores
+app.MapGet("/roommates/{id}", (int id) =>
+{
+    // find roommate
+    Roommate foundRoommate = roommates.FirstOrDefault(rm => rm.Id == id);
+
+    if (foundRoommate == null)
+    {
+        return Results.NotFound();
+    }
+
+    // find associated chores
+    List<Chore> foundChores = chores.Where(c => c.RoommateId == id).ToList();
+
+    foundRoommate.Chores = foundChores;
+
+    return Results.Ok(foundRoommate);
+});
 
 // add a roommate 
 
